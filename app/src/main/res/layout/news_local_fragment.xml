@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.NewsLocalFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_background_round_corner"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/localNewsFragmentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/local_fragment_textview_title" />
+
+        <TextView
+            android:id="@+id/local_fragment_no_book_text"
+            style="@style/localNewsFragmentNoBooks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/local_fragment_textview_no_bookmarks" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/localnews_fragment_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="5dp" />
+
+    </LinearLayout>
+
+</FrameLayout>

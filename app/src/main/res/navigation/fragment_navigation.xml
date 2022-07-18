@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_navigation"
+    app:startDestination="@id/newsSearchFragment">
+
+    <fragment
+        android:id="@+id/newsSearchFragment"
+        android:name="com.xr6software.theguardiannews.view.NewsSearchFragment"
+        android:label="news_search_fragment"
+        tools:layout="@layout/news_search_fragment" >
+        <action
+            android:id="@+id/action_newsSearchFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="com.xr6software.theguardiannews.view.NewsDetailFragment"
+        android:label="news_detail_fragment"
+        tools:layout="@layout/news_detail_fragment" />
+
+    <fragment
+        android:id="@+id/newsLocalFragment"
+        android:name="com.xr6software.theguardiannews.view.NewsLocalFragment"
+        android:label="news_search_fragment"
+        tools:layout="@layout/news_search_fragment" >
+        <action
+            android:id="@+id/action_newsLocalFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment" />
+    </fragment>
+</navigation>

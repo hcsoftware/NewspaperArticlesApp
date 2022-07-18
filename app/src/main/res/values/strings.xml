@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">The Guardian News</string>
+    <!-- search fragment string resources -->
+    <string name="search_fragment_dialog_no_results">Sorry, your search has no results.</string>
+    <string name="search_fragment_dialog_error_loading">Sorry, there\'s been an error, please check your connection</string>
+    <string name="search_fragment_dialog_error_input">Sorry, please enter a valid text between 1 and 15 characters</string>
+    <string name="search_fragment_textview_topic">TOPIC: </string>
+    <string name="search_fragment_button_search">SEARCH</string>
+    <string name="search_fragment_edittext_hint">search topic</string>
+    <!-- local news fragment string resources -->
+    <string name="local_fragment_textview_title">BOOKMARKS</string>
+    <string name="local_fragment_textview_no_bookmarks">YOU HAVE NO BOOKMARKS YET</string>
+</resources>

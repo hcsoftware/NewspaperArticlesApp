@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_detail_fragment_top_layer"
+    android:background="@drawable/shape_background_round_corner"
+    tools:context=".view.NewsDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/news_detail_fragment_headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/blue_main_dark"
+                android:padding="5dp"
+                android:textSize="21sp"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/news_detail_fragment_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/news_detail_fragment_trailtext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:padding="5dp"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/news_detail_fragment_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:gravity="right"
+                android:paddingRight="5dp"/>
+
+            <WebView
+                android:id="@+id/news_detail_fragment_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/news_detail_fragment_loading"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/news_detail_fragment_db_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/blue_main_dark"
+        app:tint="@android:color/white"
+        app:layout_anchor="@id/parent"
+        android:layout_gravity="bottom|right"/>
+
+</FrameLayout>
+
