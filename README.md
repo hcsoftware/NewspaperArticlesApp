@@ -49,6 +49,8 @@ App layers and classes: <br>
                 * NewsSearchViewModel. Provides the news from the ApiService. <br>
                 
   Some ScreenShots: 
-  
-      
-          
+  <div>
+    <img src="https://user-images.githubusercontent.com/100162759/179635994-a73b912d-514b-46f8-9ef4-9542a725f864.png" width=30% height=30%>
+    <img src="https://user-images.githubusercontent.com/100162759/179636018-23ae4adb-8ca2-4ec2-ae5a-2ce255ff79b9.png" width=30% height=30%>
+    <img src="https://user-images.githubusercontent.com/100162759/179636026-04905ac8-0dff-4755-925f-78381ab717a9.png" width=30% height=30%>
+</div>
