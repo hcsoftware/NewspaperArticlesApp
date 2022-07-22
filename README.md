@@ -1,4 +1,3 @@
-# hernan-carrera-mobile-challenge
 # The Guardian News App
 <p> Architecture : Model - View - ViewModel  <br>
 Language: Kotlin<br>
