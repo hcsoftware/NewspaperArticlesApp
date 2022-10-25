@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.xr6software.theguardiannews.R
 import com.xr6software.theguardiannews.model.NewsListItem
-import com.xr6software.theguardiannews.utils.fixTextSimbolsAndLoad
 import java.text.SimpleDateFormat
 
 class NewsListAdapter (val newsListAdapterClickListener: NewsListAdapterClickListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
@@ -35,8 +34,7 @@ class NewsListAdapter (val newsListAdapterClickListener: NewsListAdapterClickLis
 
         val newsItem : NewsListItem = newsList[position]
 
-        holder.textViewDesc.fixTextSimbolsAndLoad(newsItem.headline)
-        println(newsItem.headline)
+        holder.textViewDesc.text = newsItem.headline
         val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
         holder.textViewDate.text = simpleDateFormat.format(newsItem.webPublicationDate)
         holder.imgViewCellphone.load(newsItem.thumbnail)

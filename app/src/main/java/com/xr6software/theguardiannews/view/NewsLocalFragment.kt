@@ -19,6 +19,11 @@ import com.xr6software.theguardiannews.view.adapters.LocalNewsListAdapterClickLi
 import com.xr6software.theguardiannews.viewmodel.NewsLocalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+@author Hernán Carrera
+@version 1.0
+This Fragment lists all the news stored in local db.
+ */
 @AndroidEntryPoint
 class NewsLocalFragment : Fragment(), LocalNewsListAdapterClickListener {
 

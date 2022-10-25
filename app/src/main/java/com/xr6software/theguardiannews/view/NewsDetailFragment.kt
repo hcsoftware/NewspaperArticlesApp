@@ -15,12 +15,16 @@ import com.xr6software.theguardiannews.model.NewsDetailItem
 import com.xr6software.theguardiannews.model.NewsDetailItemLocal
 import com.xr6software.theguardiannews.model.NewsListItem
 import com.xr6software.theguardiannews.utils.MessageFactory
-import com.xr6software.theguardiannews.utils.fixTextSimbolsAndLoad
 import com.xr6software.theguardiannews.viewmodel.NewsDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+@author Hernán Carrera
+@version 1.0
+This Fragment shows a news Item description.
+ */
 @AndroidEntryPoint
 class NewsDetailFragment : Fragment() {
 
@@ -48,7 +52,7 @@ class NewsDetailFragment : Fragment() {
 
         if (arguments?.containsKey("newsListItem") == true ) {
             news = arguments?.getSerializable("newsListItem") as NewsListItem
-            viewModel.getNewsDetailFromAPIService(news.apiUrl,requireActivity())
+            viewModel.getNewsDetailFromAPIService(news.apiUrl)
             viewModel.getNewsSavedOnDbStatus(news.headline)
             localMode = false
         }
@@ -66,10 +70,10 @@ class NewsDetailFragment : Fragment() {
 
     private fun fillDataOnDetailLayout(title : String, imgUrl: String, date: Date, subtitle: String, newsBody: String) {
         viewBinding.newsDetailFragmentImage.load(imgUrl)
-        viewBinding.newsDetailFragmentHeadline.fixTextSimbolsAndLoad(title)
+        viewBinding.newsDetailFragmentHeadline.text = title
         val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
         viewBinding.newsDetailFragmentDate.text = simpleDateFormat.format(date)
-        viewBinding.newsDetailFragmentTrailtext.fixTextSimbolsAndLoad(subtitle)
+        viewBinding.newsDetailFragmentTrailtext.text = subtitle
         viewBinding.newsDetailFragmentBody.loadDataWithBaseURL("", newsBody, "text/html", "UTF-8", "")
     }
 

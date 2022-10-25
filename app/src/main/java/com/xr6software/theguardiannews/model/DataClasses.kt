@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Data classes used for api calls and news.
+ */
 data class Root(
     val response: Response
 )

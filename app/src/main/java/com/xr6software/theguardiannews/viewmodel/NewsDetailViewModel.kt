@@ -1,6 +1,5 @@
 package com.xr6software.theguardiannews.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xr6software.theguardiannews.database.NewsItemDatabase
@@ -15,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsDetailViewModel @Inject constructor(
-    private val database: NewsItemDatabase
+    private val database: NewsItemDatabase,
+    private val apiService: APIService
 ): ViewModel() {
 
     private var newsDetailItem = MutableLiveData<NewsDetailItem>()
@@ -28,13 +28,13 @@ class NewsDetailViewModel @Inject constructor(
     fun getErrorLoading() = errorLoading
     fun getItemOnLocalDb() = itemOnLocalDb
 
-    fun getNewsDetailFromAPIService(itemUrl : String, context: Context) {
+    fun getNewsDetailFromAPIService(itemUrl : String) {
 
         errorLoading.value = false
         isLoading.value = true
 
-        APIService().loadNewsDetail(context, itemUrl, object : Callback<NewsDetailItem> {
-            override fun onSucces(result: NewsDetailItem?) {
+        apiService.loadNewsDetail(itemUrl, object : Callback<NewsDetailItem> {
+            override fun onSuccess(result: NewsDetailItem?) {
                 newsDetailItem.postValue(result!!)
                 isLoading.postValue(false)
             }

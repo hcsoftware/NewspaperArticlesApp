@@ -3,6 +3,9 @@ package com.xr6software.theguardiannews.database
 import androidx.room.*
 import com.xr6software.theguardiannews.model.NewsDetailItem
 
+/**
+ * Data access object to interact with db.
+ */
 @Dao
 interface NewsDetailItemDAO {
 

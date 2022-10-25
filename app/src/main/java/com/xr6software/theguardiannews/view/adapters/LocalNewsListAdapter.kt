@@ -10,10 +10,10 @@ import coil.load
 import com.xr6software.theguardiannews.R
 import com.xr6software.theguardiannews.model.NewsDetailItem
 import com.xr6software.theguardiannews.model.toNewsDetailItemLocal
-import com.xr6software.theguardiannews.utils.fixTextSimbolsAndLoad
 import java.text.SimpleDateFormat
 
-class LocalNewsListAdapter (val localNewsListAdapterClickListener: LocalNewsListAdapterClickListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+class LocalNewsListAdapter(val localNewsListAdapterClickListener: LocalNewsListAdapterClickListener) :
+    RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
     var newsList = listOf<NewsDetailItem>()
 
@@ -34,9 +34,9 @@ class LocalNewsListAdapter (val localNewsListAdapterClickListener: LocalNewsList
 
     override fun onBindViewHolder(holder: NewsListAdapter.ViewHolder, position: Int) {
 
-        val newsItem : NewsDetailItem = newsList[position]
+        val newsItem: NewsDetailItem = newsList[position]
 
-        holder.textViewDesc.fixTextSimbolsAndLoad(newsItem.headline)
+        holder.textViewDesc.text = newsItem.headline
         val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
         holder.textViewDate.text = simpleDateFormat.format(newsItem.firstPublicationDate)
         holder.imgViewCellphone.load(newsItem.thumbnail)
@@ -48,11 +48,11 @@ class LocalNewsListAdapter (val localNewsListAdapterClickListener: LocalNewsList
 
     override fun getItemCount() = newsList.size
 
-    class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
+    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
-        val textViewDesc : TextView = v.findViewById(R.id.item_list_test_text)
+        val textViewDesc: TextView = v.findViewById(R.id.item_list_test_text)
         val imgViewCellphone: ImageView = v.findViewById(R.id.item_list_test_image)
-        val textViewDate : TextView = v.findViewById(R.id.item_list_test_textdate)
+        val textViewDate: TextView = v.findViewById(R.id.item_list_test_textdate)
 
     }
 }

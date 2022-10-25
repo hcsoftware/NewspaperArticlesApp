@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * Factory pattern to show messages to user as Toast or Snackbar
+ */
 class MessageFactory {
 
     companion object {

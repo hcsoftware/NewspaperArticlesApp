@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsSearchViewModel @Inject constructor(): ViewModel() {
+class NewsSearchViewModel @Inject constructor(private val apiService: APIService): ViewModel() {
 
     private var newsList = MutableLiveData<List<NewsListItem>>()
     private var isLoading : MutableLiveData<Boolean> = MutableLiveData(false)
@@ -24,12 +24,12 @@ class NewsSearchViewModel @Inject constructor(): ViewModel() {
     fun getNoResults() : MutableLiveData<Boolean> = noResults
     fun getErrorLoading() : MutableLiveData<Boolean> = errorLoading
 
-    fun getNewsListFromAPIService(topic : String, context: Context) {
+    fun getNewsListFromAPIService(topic : String,beginDate : String, endDate : String) {
 
         noResults.value = false
         isLoading.value = true
-        APIService().loadNewsList(context, topic, object : Callback<List<Result>>{
-            override fun onSucces(result: List<Result>?) {
+        apiService.loadNewsList(topic, beginDate, endDate, object : Callback<List<Result>>{
+            override fun onSuccess(result: List<Result>?) {
 
                 if (!result!!.isEmpty()) {
                     var newsListCast : MutableList<NewsListItem> = mutableListOf()

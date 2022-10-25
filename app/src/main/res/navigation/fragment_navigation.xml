@@ -24,7 +24,7 @@
         android:id="@+id/newsLocalFragment"
         android:name="com.xr6software.theguardiannews.view.NewsLocalFragment"
         android:label="news_search_fragment"
-        tools:layout="@layout/news_search_fragment" >
+        tools:layout="@layout/news_local_fragment" >
         <action
             android:id="@+id/action_newsLocalFragment_to_newsDetailFragment"
             app:destination="@id/newsDetailFragment" />

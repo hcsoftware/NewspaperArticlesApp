@@ -2,6 +2,9 @@ package com.xr6software.theguardiannews.utils
 
 import androidx.room.TypeConverter
 
+/**
+ *  Converts date format for db.
+ */
 class DatabaseConverters {
 
     @TypeConverter
