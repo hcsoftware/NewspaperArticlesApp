@@ -1,4 +1,4 @@
-package com.xr6software.theguardiannews
+package com.xr6software.theguardiannews.di.modules
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

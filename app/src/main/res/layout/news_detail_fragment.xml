@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/news_detail_fragment_top_layer"
     android:background="@drawable/shape_background_round_corner"
-    tools:context=".view.NewsDetailFragment">
+    tools:context=".view.fragments.NewsDetailFragment">
 
     <ScrollView
         android:layout_width="match_parent"

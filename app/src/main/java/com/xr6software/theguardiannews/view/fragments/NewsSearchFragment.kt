@@ -1,4 +1,4 @@
-package com.xr6software.theguardiannews.view
+package com.xr6software.theguardiannews.view.fragments
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
@@ -17,13 +17,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xr6software.theguardiannews.R
 import com.xr6software.theguardiannews.databinding.NewsSearchFragmentBinding
-import com.xr6software.theguardiannews.model.NewsListItem
+import com.xr6software.theguardiannews.model.NewsArticle
+import com.xr6software.theguardiannews.model.NewsArticleInfo
+import com.xr6software.theguardiannews.model.toNewsArticle
 import com.xr6software.theguardiannews.utils.*
+import com.xr6software.theguardiannews.view.adapters.AdapterClickListener
 import com.xr6software.theguardiannews.view.adapters.NewsListAdapter
-import com.xr6software.theguardiannews.view.adapters.NewsListAdapterClickListener
-import com.xr6software.theguardiannews.viewmodel.NewsSearchViewModel
+import com.xr6software.theguardiannews.viewmodel.fragments.NewsSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -32,7 +33,7 @@ import java.util.*
 This Fragment searchs for news given a topic and list results.
  */
 @AndroidEntryPoint
-class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
+class NewsSearchFragment : Fragment(), AdapterClickListener<String> {
 
     companion object {
         fun newInstance() = NewsSearchFragment()
@@ -41,6 +42,7 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
     val viewModel by viewModels<NewsSearchViewModel>()
     private lateinit var viewBinding: NewsSearchFragmentBinding
     private lateinit var recyclerView: RecyclerView
+    private lateinit var newsArticleInfoList: List<NewsArticleInfo>
     private val newsListAdapter: NewsListAdapter by lazy {
         NewsListAdapter(this)
     }
@@ -48,7 +50,7 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewBinding = NewsSearchFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -67,42 +69,51 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
         setObservers()
     }
 
-    private fun setObservers() {
-        viewModel.getIsLoading().observe(viewLifecycleOwner, Observer {
-            if (it) {
-                viewBinding.searchFragmentLoading.visibility = View.VISIBLE
-            } else {
-                viewBinding.searchFragmentLoading.visibility = View.GONE
-            }
-        })
-        viewModel.getNewsList().observe(viewLifecycleOwner, Observer {
-            newsListAdapter.updateDataOnView(it)
-        })
-        viewModel.getNoResults().observe(viewLifecycleOwner, Observer {
-            if (it) {
-                MessageFactory.showToast(
-                    requireActivity(),
-                    R.string.search_fragment_dialog_no_results, Gravity.CENTER
-                )
-            }
-        })
-        viewModel.getErrorLoading().observe(viewLifecycleOwner, Observer {
-            if (it) {
-                MessageFactory.showToast(
-                    requireActivity(),
-                    R.string.search_fragment_dialog_error_loading, Gravity.CENTER
-                )
-            }
-        })
-    }
-
     private fun setDefaultValues() {
         viewBinding.searchFragmentInputDateFrom.setText("2010/01/01")
-        viewBinding.searchFragmentInputDateTo.setText(Date().getCurrentDateTime().toString("yyyy/MM/dd"))
+        viewBinding.searchFragmentInputDateTo.setText(
+            Date().getCurrentDateTime().toString("yyyy/MM/dd")
+        )
+    }
+
+    private fun setObservers() {
+
+        viewModel.getUiState().observe(viewLifecycleOwner, Observer { uiState ->
+            when (uiState) {
+                NewsSearchViewModel.UiSearchFragmentState.Loading -> {
+                    viewBinding.searchFragmentLoading.visibility = View.VISIBLE
+                }
+                NewsSearchViewModel.UiSearchFragmentState.NoResults -> {
+                    viewBinding.searchFragmentLoading.visibility = View.GONE
+                    MessageFactory.showToast(
+                        requireActivity(),
+                        R.string.search_fragment_dialog_no_results, Gravity.CENTER
+                    )
+                    newsListAdapter.updateDataOnView(listOf<NewsArticle>())
+                }
+                is NewsSearchViewModel.UiSearchFragmentState.Error -> {
+                    viewBinding.searchFragmentLoading.visibility = View.GONE
+                    MessageFactory.showToast(
+                        requireActivity(),
+                        R.string.search_fragment_dialog_error_loading, Gravity.CENTER
+                    )
+                    newsListAdapter.updateDataOnView(listOf<NewsArticle>())
+                }
+                is NewsSearchViewModel.UiSearchFragmentState.Articles -> {
+                    viewBinding.searchFragmentLoading.visibility = View.GONE
+                    newsArticleInfoList = uiState.articlesList
+                    val itemList = uiState.articlesList.map {
+                        it.toNewsArticle()
+                    }
+                    newsListAdapter.updateDataOnView(itemList)
+                }
+                else -> {}
+            }
+        })
+
     }
 
     private fun setOnClickListeners() {
-
         viewBinding.searchFragmentInputDateFrom.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 showDateDialog(v as EditText)
@@ -112,28 +123,21 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
             if (hasFocus) {
                 showDateDialog(v as EditText)
             }
-
         }
         viewBinding.searchFragmentSearchButton.setOnClickListener {
-
-            if (viewBinding.searchFragmentInputText.validateUserInput()
-                &&
-                viewBinding.searchFragmentInputDateFrom.text.toString().datePeriodIsValid(
-                    viewBinding.searchFragmentInputDateTo.text.toString()
-                )
-            ) {
-                var searchTopic : String
+            if (checkValidUserInput()) {
+                var searchTopic: String
                 if (viewBinding.searchFragmentExactCheckbox.isChecked) {
-                    searchTopic = viewBinding.searchFragmentInputText.text.toString().trim().addDoubleQuotes()
-                }
-                else {
+                    searchTopic =
+                        viewBinding.searchFragmentInputText.text.toString().trim().addDoubleQuotes()
+                } else {
                     searchTopic = viewBinding.searchFragmentInputText.text.toString().trim()
                 }
-
-                viewModel.getNewsListFromAPIService(
+                viewModel.searchNewsArticles(
                     searchTopic,
                     viewBinding.searchFragmentInputDateFrom.text.toString(),
-                    viewBinding.searchFragmentInputDateTo.text.toString())
+                    viewBinding.searchFragmentInputDateTo.text.toString()
+                )
             } else {
                 MessageFactory.showToast(
                     requireActivity(),
@@ -144,10 +148,13 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
         }
     }
 
-    override fun onClick(newsListItem: NewsListItem) {
-        val bundle: Bundle = bundleOf("newsListItem" to newsListItem)
-        findNavController().navigate(R.id.newsDetailFragment, bundle)
-
+    private fun checkValidUserInput(): Boolean {
+        return (viewBinding.searchFragmentInputText.validateUserInput()
+                &&
+                viewBinding.searchFragmentInputDateFrom.text.toString().datePeriodIsValid(
+                    viewBinding.searchFragmentInputDateTo.text.toString()
+                )
+                )
     }
 
     private fun showDateDialog(editText: EditText) {
@@ -162,6 +169,13 @@ class NewsSearchFragment : Fragment(), NewsListAdapterClickListener {
             Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
         )
         dpDialog.show()
+    }
+
+    override fun onClick(newsTitle: String, position: Int) {
+        //false indicates the item isn't locally.
+        val data : Pair<String, Boolean> = Pair(newsArticleInfoList[position].apiUrl, false)
+        val bundle : Bundle = bundleOf("fragmentItem" to data)
+        findNavController().navigate(R.id.newsDetailFragment,bundle)
     }
 
 }

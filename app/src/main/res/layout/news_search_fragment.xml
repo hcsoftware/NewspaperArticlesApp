@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/search_fragment_top_layer"
-    tools:context=".view.NewsSearchFragment">
+    tools:context=".view.fragments.SearchResultsSearchFragment">
 
     <LinearLayout
         android:background="@drawable/shape_background_round_corner"

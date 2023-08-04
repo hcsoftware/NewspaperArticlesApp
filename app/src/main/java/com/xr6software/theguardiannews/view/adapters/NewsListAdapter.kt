@@ -8,43 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.xr6software.theguardiannews.R
-import com.xr6software.theguardiannews.model.NewsListItem
+import com.xr6software.theguardiannews.model.NewsArticle
 import java.text.SimpleDateFormat
 
-class NewsListAdapter (val newsListAdapterClickListener: NewsListAdapterClickListener) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+class NewsListAdapter (private val adapterClickListener: AdapterClickListener<String>) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
 
-    var newsList = listOf<NewsListItem>()
-
-    fun updateDataOnView(news: List<NewsListItem>?) {
-
-        news?.let {
-            newsList = it
-            notifyDataSetChanged()
-        }
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return   ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_news_list, parent, false)
-        )
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        val newsItem : NewsListItem = newsList[position]
-
-        holder.textViewDesc.text = newsItem.headline
-        val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
-        holder.textViewDate.text = simpleDateFormat.format(newsItem.webPublicationDate)
-        holder.imgViewCellphone.load(newsItem.thumbnail)
-        holder.itemView.setOnClickListener {
-            newsListAdapterClickListener.onClick(newsItem)
-        }
-
-    }
-
-    override fun getItemCount() = newsList.size
+    var itemList = listOf<NewsArticle>()
 
     class ViewHolder(v : View) : RecyclerView.ViewHolder(v) {
 
@@ -53,4 +22,35 @@ class NewsListAdapter (val newsListAdapterClickListener: NewsListAdapterClickLis
         val textViewDate : TextView = v.findViewById(R.id.item_list_test_textdate)
 
     }
+
+    fun updateDataOnView(news: List<NewsArticle>) {
+        itemList = news
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return NewsListAdapter.ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_news_list, parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val newsItem : NewsArticle = itemList[position]
+
+        holder.textViewDesc.text = newsItem.headline
+        val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
+        holder.textViewDate.text = simpleDateFormat.format(newsItem.firstPublicationDate)
+        holder.imgViewCellphone.load(newsItem.thumbnail)
+        holder.itemView.setOnClickListener {
+            adapterClickListener.onClick(newsItem.headline, position)
+        }
+
+    }
+
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
+
+
 }

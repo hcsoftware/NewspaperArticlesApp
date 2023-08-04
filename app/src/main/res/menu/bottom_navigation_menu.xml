@@ -3,10 +3,10 @@
     <item
         android:id="@+id/newsSearchFragment"
         android:icon="@drawable/ic_menu_search_24"
-        android:title="Search"/>
+        android:title="@string/menu_item_0"/>
 
     <item
         android:id="@+id/newsLocalFragment"
         android:icon="@drawable/ic_menu_bookmarks_24"
-        android:title="Bookmarks" />
+        android:title="@string/menu_item_1" />
 </menu>

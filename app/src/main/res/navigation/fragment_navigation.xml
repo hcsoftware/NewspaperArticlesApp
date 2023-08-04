@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/newsSearchFragment"
-        android:name="com.xr6software.theguardiannews.view.NewsSearchFragment"
+        android:name="com.xr6software.theguardiannews.view.fragments.NewsSearchFragment"
         android:label="news_search_fragment"
         tools:layout="@layout/news_search_fragment" >
         <action
@@ -16,13 +16,15 @@
     </fragment>
     <fragment
         android:id="@+id/newsDetailFragment"
-        android:name="com.xr6software.theguardiannews.view.NewsDetailFragment"
+        android:name="com.xr6software.theguardiannews.view.fragments.NewsDetailFragment"
         android:label="news_detail_fragment"
-        tools:layout="@layout/news_detail_fragment" />
+        tools:layout="@layout/news_detail_fragment"
+        >
+    </fragment>
 
     <fragment
         android:id="@+id/newsLocalFragment"
-        android:name="com.xr6software.theguardiannews.view.NewsLocalFragment"
+        android:name="com.xr6software.theguardiannews.view.fragments.NewsLocalFragment"
         android:label="news_search_fragment"
         tools:layout="@layout/news_local_fragment" >
         <action

@@ -11,4 +11,6 @@
     <!-- local news fragment string resources -->
     <string name="local_fragment_textview_title">BOOKMARKS</string>
     <string name="local_fragment_textview_no_bookmarks">YOU HAVE NO BOOKMARKS YET</string>
+    <string name="menu_item_1">Bookmarks</string>
+    <string name="menu_item_0">Search</string>
 </resources>

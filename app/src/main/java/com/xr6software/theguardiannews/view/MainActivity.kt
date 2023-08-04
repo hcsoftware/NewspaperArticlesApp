@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         bottomToolbar = findViewById(R.id.ma_bottom_menu)
         configNav()
 
-
     }
 
     private fun configNav() {

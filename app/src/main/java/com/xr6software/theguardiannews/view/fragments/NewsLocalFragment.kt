@@ -1,4 +1,4 @@
-package com.xr6software.theguardiannews.view
+package com.xr6software.theguardiannews.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xr6software.theguardiannews.R
+import com.xr6software.theguardiannews.database.model.toNewsArticle
 import com.xr6software.theguardiannews.databinding.NewsLocalFragmentBinding
-import com.xr6software.theguardiannews.model.NewsDetailItemLocal
-import com.xr6software.theguardiannews.view.adapters.LocalNewsListAdapter
-import com.xr6software.theguardiannews.view.adapters.LocalNewsListAdapterClickListener
-import com.xr6software.theguardiannews.viewmodel.NewsLocalViewModel
+import com.xr6software.theguardiannews.view.adapters.AdapterClickListener
+import com.xr6software.theguardiannews.view.adapters.NewsListAdapter
+import com.xr6software.theguardiannews.viewmodel.fragments.NewsLocalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 This Fragment lists all the news stored in local db.
  */
 @AndroidEntryPoint
-class NewsLocalFragment : Fragment(), LocalNewsListAdapterClickListener {
+class NewsLocalFragment : Fragment(), AdapterClickListener<String> {
 
     companion object {
         fun newInstance() = NewsLocalFragment()
@@ -34,14 +34,14 @@ class NewsLocalFragment : Fragment(), LocalNewsListAdapterClickListener {
     val viewModel by viewModels<NewsLocalViewModel>()
     private lateinit var viewBinding: NewsLocalFragmentBinding
     private lateinit var recyclerView: RecyclerView
-    private val newsListAdapter : LocalNewsListAdapter by lazy {
-        LocalNewsListAdapter(this)
+    private val newsListAdapter : NewsListAdapter by lazy {
+        NewsListAdapter(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewBinding = NewsLocalFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -55,19 +55,24 @@ class NewsLocalFragment : Fragment(), LocalNewsListAdapterClickListener {
             adapter = newsListAdapter
         }
         setObservers()
-        viewModel.getNewsListFromLocalDatabase(requireActivity())
+        viewModel.loadSavedNews()
     }
 
-    fun setObservers() {
+    private fun setObservers() {
         viewModel.getNewsList().observe(viewLifecycleOwner, Observer {
-            newsListAdapter.updateDataOnView(it)
+            val itemList = it.map {
+               it.toNewsArticle()
+            }
+            newsListAdapter.updateDataOnView(itemList)
             viewBinding.localFragmentNoBookText.visibility = View.GONE
             if(it.isEmpty()) {viewBinding.localFragmentNoBookText.visibility = View.VISIBLE}
         })
     }
 
-    override fun onClick(newsDetailItemLocal: NewsDetailItemLocal) {
-        val bundle : Bundle = bundleOf("newsDetailItemLocal" to newsDetailItemLocal)
+    override fun onClick(newsTitle: String, position: Int) {
+        //true indicates the item is local.
+        val data : Pair<String, Boolean> = Pair(newsTitle, true)
+        val bundle : Bundle = bundleOf("fragmentItem" to data)
         findNavController().navigate(R.id.newsDetailFragment,bundle)
     }
 
